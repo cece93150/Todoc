@@ -56,4 +56,20 @@ public class TaskViewModel extends ViewModel {
     public void deleteTask(Task task) {
         mExecutor.execute(() -> mTaskDataSource.deleteTask(task));
     }
+
+    public LiveData<List<Task>> getTasksSortByAscTaskName() {
+        return mTaskDataSource.getTasksSortByAscName();
+    }
+
+    public LiveData<List<Task>> getTasksSortByDescTaskName() {
+        return mTaskDataSource.getTasksSortByDescName();
+    }
+
+    public LiveData<List<Task>> getTasksSortByAscNumberTime() {
+        return mTaskDataSource.getTasksSortByAscNumberTime();
+    }
+
+    public LiveData<List<Task>> getTasksSortByDescNumberTime() {
+        return mTaskDataSource.getTasksSortByDescNumberTime();
+    }
 }

@@ -30,4 +30,20 @@ public class TaskDataRepository {
     public void deleteAllTask(Task task) {
         mTaskDao.deleteAllTask();
     }
+
+    public LiveData<List<Task>> getTasksSortByAscName() {
+        return mTaskDao.getTasksSortByAscName();
+    }
+
+    public LiveData<List<Task>> getTasksSortByDescName() {
+        return mTaskDao.getTasksSortByDescName();
+    }
+
+    public LiveData<List<Task>> getTasksSortByAscNumberTime() {
+        return mTaskDao.getTasksSortByAscNumberTime();
+    }
+
+    public LiveData<List<Task>> getTasksSortByDescNumberTime() {
+        return mTaskDao.getTasksSortByDescNumberTime();
+    }
 }

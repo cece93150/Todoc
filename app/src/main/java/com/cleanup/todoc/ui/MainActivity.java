@@ -1,5 +1,6 @@
 package com.cleanup.todoc.ui;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
@@ -46,17 +47,10 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     private Project[] allProjects = Project.getAllProjects();
 
 
-
     /**
      * The adapter which handles the list of tasks
      */
     private final TasksAdapter adapter = new TasksAdapter(new ArrayList<>(), this);
-
-    /**
-     * The sort method to be used to display tasks
-     */
-    @NonNull
-    private SortMethod sortMethod = SortMethod.NONE;
 
     /**
      * Dialog to create a new task
@@ -94,6 +88,8 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
 
     public TaskViewModel mTaskViewModel;
 
+    int idSort = 0;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,16 +102,40 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         listTasks.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         listTasks.setAdapter(adapter);
 
-        findViewById(R.id.fab_add_task).setOnClickListener(View -> showAddTaskDialog());
+        findViewById(R.id.fab_add_task).setOnClickListener(view -> showAddTaskDialog());
 
         configureViewModel();
         mTaskViewModel.getTasks().observe(this, new Observer<List<Task>>() {
             @Override
             public void onChanged(List<Task> tasks) {
-               updateTasks(tasks);
+                updateTasks(tasks);
             }
         });
         getProjects();
+
+
+        switch(savedInstanceState != null ? savedInstanceState.getInt("idSort") : 0) {
+            case 1:
+                getTasksSortByAscTaskName();
+                idSort = 1;
+                break;
+            case 2:
+                getTasksSortByDescTaskName();
+                idSort = 2;
+                break;
+            case 3:
+                getTasksSortByAscNumberTime();
+                idSort = 3;
+                break;
+            case 4:
+                getTasksSortByDescNumberTime();
+                idSort = 4;
+                break;
+
+            default:
+                getTasks();
+        }
+
     }
 
     private void configureViewModel() {
@@ -127,8 +147,29 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     private void getProjects() {
         mTaskViewModel.getProjects().observe(this, this::updateProjects);
     }
+
     private void updateProjects(List<Project> projects) {
         allProjects = projects.toArray(new Project[0]);
+    }
+
+    private void getTasks() {
+        mTaskViewModel.getTasks().observe(this, this::updateTasks);
+    }
+
+    private void getTasksSortByAscNumberTime() {
+        mTaskViewModel.getTasksSortByAscNumberTime().observe(this, this::updateTasks);
+    }
+
+    private void getTasksSortByDescNumberTime() {
+        mTaskViewModel.getTasksSortByDescNumberTime().observe(this, this::updateTasks);
+    }
+
+    private void getTasksSortByAscTaskName() {
+        mTaskViewModel.getTasksSortByAscTaskName().observe(this, this::updateTasks);
+    }
+
+    private void getTasksSortByDescTaskName() {
+        mTaskViewModel.getTasksSortByDescTaskName().observe(this, this::updateTasks);
     }
 
     @Override
@@ -137,29 +178,47 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         return true;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.filter_alphabetical:
+                idSort = 1 ;
+                getTasksSortByAscTaskName();
+                return true;
+            case R.id.filter_alphabetical_inverted:
+                idSort = 2 ;
+                getTasksSortByDescTaskName();
+                return true;
+            case R.id.filter_oldest_first:
+                idSort = 3 ;
+                getTasksSortByAscNumberTime();
+                return true;
+            case R.id.filter_recent_first:
+                idSort = 4 ;
+                getTasksSortByDescNumberTime();
+                return true;
 
-        if (id == R.id.filter_alphabetical) {
-            sortMethod = SortMethod.ALPHABETICAL;
-        } else if (id == R.id.filter_alphabetical_inverted) {
-            sortMethod = SortMethod.ALPHABETICAL_INVERTED;
-        } else if (id == R.id.filter_oldest_first) {
-            sortMethod = SortMethod.OLD_FIRST;
-        } else if (id == R.id.filter_recent_first) {
-            sortMethod = SortMethod.RECENT_FIRST;
+            default:
+
+                return super.onOptionsItemSelected(item);
+
         }
-
-       // updateTasks();
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onDeleteTask(Task task) {
-       mTaskViewModel.deleteTask(task);
+    protected void onSaveInstanceState(Bundle outState) {
 
+        outState.putInt("idSort", idSort);
+
+        super.onSaveInstanceState(outState);
+    }
+
+
+
+    @Override
+    public void onDeleteTask(Task task) {
+        mTaskViewModel.deleteTask(task);
     }
 
     /**
@@ -185,12 +244,9 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             }
             // If both project and name of the task have been set
             else if (taskProject != null) {
-                // TODO: Replace this by id of persisted task
+
                 long id = (long) (Math.random() * 50000);
-
-
-                Task task = new Task(
-                        id,
+                Task task = new Task(id,
                         taskProject.getId(),
                         taskName,
                         new Date().getTime()
@@ -201,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
                 dialogInterface.dismiss();
             }
             // If name has been set, but project has not been set (this should never occur)
-            else{
+            else {
                 dialogInterface.dismiss();
             }
         }
@@ -239,26 +295,13 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      */
     private void updateTasks(List<Task> tasks) {
         if (tasks.size() == 0) {
+            adapter.updateTasks(tasks);
             lblNoTasks.setVisibility(View.VISIBLE);
             listTasks.setVisibility(View.GONE);
         } else {
             lblNoTasks.setVisibility(View.GONE);
             listTasks.setVisibility(View.VISIBLE);
-            switch (sortMethod) {
-                case ALPHABETICAL:
-                    Collections.sort(tasks, new Task.TaskAZComparator());
-                    break;
-                case ALPHABETICAL_INVERTED:
-                    Collections.sort(tasks, new Task.TaskZAComparator());
-                    break;
-                case RECENT_FIRST:
-                    Collections.sort(tasks, new Task.TaskRecentComparator());
-                    break;
-                case OLD_FIRST:
-                    Collections.sort(tasks, new Task.TaskOldComparator());
-                    break;
 
-            }
             adapter.updateTasks(tasks);
         }
     }
@@ -275,32 +318,19 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         alertBuilder.setTitle(R.string.add_task);
         alertBuilder.setView(R.layout.dialog_add_task);
         alertBuilder.setPositiveButton(R.string.add, null);
-        alertBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                dialogEditText = null;
-                dialogSpinner = null;
-                dialog = null;
-            }
+        alertBuilder.setOnDismissListener(dialogInterface -> {
+            dialogEditText = null;
+            dialogSpinner = null;
+            dialog = null;
         });
 
         dialog = alertBuilder.create();
 
         // This instead of listener to positive button in order to avoid automatic dismiss
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+        dialog.setOnShowListener(dialogInterface -> {
 
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-
-                Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                button.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-                        onPositiveButtonClick(dialog);
-                    }
-                });
-            }
+            Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            button.setOnClickListener(view -> onPositiveButtonClick(dialog));
         });
 
         return dialog;
@@ -317,29 +347,4 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         }
     }
 
-    /**
-     * List of all possible sort methods for task
-     */
-    private enum SortMethod {
-        /**
-         * Sort alphabetical by name
-         */
-        ALPHABETICAL,
-        /**
-         * Inverted sort alphabetical by name
-         */
-        ALPHABETICAL_INVERTED,
-        /**
-         * Lastly created first
-         */
-        RECENT_FIRST,
-        /**
-         * First created first
-         */
-        OLD_FIRST,
-        /**
-         * No sort
-         */
-        NONE
-    }
 }
