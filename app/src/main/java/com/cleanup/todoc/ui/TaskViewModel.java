@@ -49,7 +49,7 @@ public class TaskViewModel extends ViewModel {
                         return mTaskDataSource.getTasksSortByDescNumberTime();
 
                     default:
-                        return getTasks();
+                        return mTaskDataSource.getTasks();
                 }
             }
         });
