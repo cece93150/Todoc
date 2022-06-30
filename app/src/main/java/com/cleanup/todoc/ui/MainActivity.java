@@ -1,8 +1,11 @@
 package com.cleanup.todoc.ui;
 
+import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
+
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -114,28 +117,10 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         getProjects();
 
 
-        switch(savedInstanceState != null ? savedInstanceState.getInt("idSort") : 0) {
-            case 1:
-                getTasksSortByAscTaskName();
-                idSort = 1;
-                break;
-            case 2:
-                getTasksSortByDescTaskName();
-                idSort = 2;
-                break;
-            case 3:
-                getTasksSortByAscNumberTime();
-                idSort = 3;
-                break;
-            case 4:
-                getTasksSortByDescNumberTime();
-                idSort = 4;
-                break;
-
-            default:
-                getTasks();
+        if (savedInstanceState != null) {
+            idSort = savedInstanceState.getInt("idSort");
         }
-
+        mTaskViewModel.onSortChanged(idSort);
     }
 
     private void configureViewModel() {
@@ -152,26 +137,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         allProjects = projects.toArray(new Project[0]);
     }
 
-    private void getTasks() {
-        mTaskViewModel.getTasks().observe(this, this::updateTasks);
-    }
-
-    private void getTasksSortByAscNumberTime() {
-        mTaskViewModel.getTasksSortByAscNumberTime().observe(this, this::updateTasks);
-    }
-
-    private void getTasksSortByDescNumberTime() {
-        mTaskViewModel.getTasksSortByDescNumberTime().observe(this, this::updateTasks);
-    }
-
-    private void getTasksSortByAscTaskName() {
-        mTaskViewModel.getTasksSortByAscTaskName().observe(this, this::updateTasks);
-    }
-
-    private void getTasksSortByDescTaskName() {
-        mTaskViewModel.getTasksSortByDescTaskName().observe(this, this::updateTasks);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actions, menu);
@@ -183,27 +148,25 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.filter_alphabetical:
-                idSort = 1 ;
-                getTasksSortByAscTaskName();
-                return true;
+                idSort = 1;
+                break;
             case R.id.filter_alphabetical_inverted:
-                idSort = 2 ;
-                getTasksSortByDescTaskName();
-                return true;
+                idSort = 2;
+                break;
             case R.id.filter_oldest_first:
-                idSort = 3 ;
-                getTasksSortByAscNumberTime();
-                return true;
+                idSort = 3;
+                break;
             case R.id.filter_recent_first:
-                idSort = 4 ;
-                getTasksSortByDescNumberTime();
-                return true;
+                idSort = 4;
+                break;
 
             default:
 
                 return super.onOptionsItemSelected(item);
 
         }
+        mTaskViewModel.onSortChanged(idSort);
+        return true;
     }
 
     @Override
@@ -213,7 +176,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
 
         super.onSaveInstanceState(outState);
     }
-
 
 
     @Override
@@ -294,6 +256,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      * Updates the list of tasks in the UI
      */
     private void updateTasks(List<Task> tasks) {
+        Log.d(TAG, "updateTasks: ");
         if (tasks.size() == 0) {
             adapter.updateTasks(tasks);
             lblNoTasks.setVisibility(View.VISIBLE);

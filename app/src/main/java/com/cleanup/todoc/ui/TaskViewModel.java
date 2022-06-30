@@ -1,7 +1,10 @@
 package com.cleanup.todoc.ui;
 
 import androidx.annotation.Nullable;
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.cleanup.todoc.model.Project;
@@ -18,15 +21,38 @@ public class TaskViewModel extends ViewModel {
     private final ProjectDataRepository mProjectDataSource;
     private final TaskDataRepository mTaskDataSource;
     private final Executor mExecutor;
+    private MutableLiveData <Integer> idSort = new MutableLiveData<>();
 
     //Data
     @Nullable
     private LiveData<List<Project>> mProjects;
+    private LiveData<List<Task>> mTasks;
 
     public TaskViewModel(ProjectDataRepository projectDataSource, TaskDataRepository taskDataSource, Executor executor) {
         mProjectDataSource = projectDataSource;
         mTaskDataSource = taskDataSource;
         mExecutor = executor;
+        mTasks = Transformations.switchMap(idSort, new Function<Integer, LiveData<List<Task>>>() {
+            @Override
+            public LiveData<List<Task>> apply(Integer input) {
+                switch (input) {
+                    case 1:
+                        return mTaskDataSource.getTasksSortByAscName();
+
+                    case 2:
+                        return mTaskDataSource.getTasksSortByDescName();
+
+                    case 3:
+                        return mTaskDataSource.getTasksSortByAscNumberTime();
+
+                    case 4:
+                        return mTaskDataSource.getTasksSortByDescNumberTime();
+
+                    default:
+                        return getTasks();
+                }
+            }
+        });
     }
 
     public void init() {
@@ -46,7 +72,7 @@ public class TaskViewModel extends ViewModel {
     //For Tasks
     //------------
     public LiveData<List<Task>> getTasks() {
-        return mTaskDataSource.getTasks();
+        return mTasks;
     }
 
     public void createTask(Task task) {
@@ -57,19 +83,7 @@ public class TaskViewModel extends ViewModel {
         mExecutor.execute(() -> mTaskDataSource.deleteTask(task));
     }
 
-    public LiveData<List<Task>> getTasksSortByAscTaskName() {
-        return mTaskDataSource.getTasksSortByAscName();
-    }
-
-    public LiveData<List<Task>> getTasksSortByDescTaskName() {
-        return mTaskDataSource.getTasksSortByDescName();
-    }
-
-    public LiveData<List<Task>> getTasksSortByAscNumberTime() {
-        return mTaskDataSource.getTasksSortByAscNumberTime();
-    }
-
-    public LiveData<List<Task>> getTasksSortByDescNumberTime() {
-        return mTaskDataSource.getTasksSortByDescNumberTime();
+    public void onSortChanged(int idSort){
+        this.idSort.setValue(idSort);
     }
 }
