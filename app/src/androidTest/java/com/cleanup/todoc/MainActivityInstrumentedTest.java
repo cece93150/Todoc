@@ -40,8 +40,6 @@ public class MainActivityInstrumentedTest {
     @Rule
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class);
 
-   // List<Task> tasks  = LiveDataTestUtil.getOrAwaitValue(TaskDataRepository.getTasks());
-
     @Test
     public void addAndRemoveTask() {
         MainActivity activity = rule.getActivity();
