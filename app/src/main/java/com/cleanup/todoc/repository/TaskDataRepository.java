@@ -1,6 +1,7 @@
 package com.cleanup.todoc.repository;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.cleanup.todoc.DataBase.DataBase.dao.TaskDao;
 import com.cleanup.todoc.model.Task;
@@ -25,10 +26,6 @@ public class TaskDataRepository {
 
     public void deleteTask(Task task) {
         mTaskDao.deleteTask(task);
-    }
-
-    public void deleteAllTask(Task task) {
-        mTaskDao.deleteAllTask();
     }
 
     public LiveData<List<Task>> getTasksSortByAscName() {

@@ -1,26 +1,17 @@
 package com.cleanup.todoc;
 
-import com.cleanup.todoc.DataBase.DataBase.dao.TaskDao;
 import com.cleanup.todoc.model.Task;
 import com.cleanup.todoc.repository.TaskDataRepository;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
-import android.content.Context;
-
-import androidx.room.Room;
-import androidx.test.core.app.ApplicationProvider;
 
 /**
  * Unit tests for tasks
@@ -28,6 +19,8 @@ import androidx.test.core.app.ApplicationProvider;
  * @author Gaëtan HERFRAY
  */
 public class TaskUnitTest {
+
+    private TaskDataRepository mTaskDataRepository;
 
     final Task task1 = new Task(1, 1, "aaa", 123);
     final Task task2 = new Task(2, 2, "zzz", 124);
@@ -49,7 +42,7 @@ public class TaskUnitTest {
         tasks.add(task1);
         tasks.add(task2);
         tasks.add(task3);
-        Collections.sort(tasks, new Task.TaskAZComparator());
+        mTaskDataRepository.getTasksSortByAscName();
 
         assertSame(tasks.get(0), task1);
         assertSame(tasks.get(1), task3);
@@ -62,7 +55,7 @@ public class TaskUnitTest {
         tasks.add(task1);
         tasks.add(task2);
         tasks.add(task3);
-        Collections.sort(tasks, new Task.TaskZAComparator());
+        mTaskDataRepository.getTasksSortByDescName();
 
         assertSame(tasks.get(0), task2);
         assertSame(tasks.get(1), task3);
@@ -75,7 +68,7 @@ public class TaskUnitTest {
         tasks.add(task1);
         tasks.add(task2);
         tasks.add(task3);
-        Collections.sort(tasks, new Task.TaskRecentComparator());
+        mTaskDataRepository.getTasksSortByAscNumberTime();
 
         assertSame(tasks.get(0), task3);
         assertSame(tasks.get(1), task2);
@@ -88,10 +81,11 @@ public class TaskUnitTest {
         tasks.add(task1);
         tasks.add(task2);
         tasks.add(task3);
-        Collections.sort(tasks, new Task.TaskOldComparator());
+        mTaskDataRepository.getTasksSortByDescNumberTime();
 
         assertSame(tasks.get(0), task1);
         assertSame(tasks.get(1), task2);
         assertSame(tasks.get(2), task3);
+
     }
 }
