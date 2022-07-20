@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-public class UnitTest {
+public class TaskDataRepositoryTest {
 
     TaskDao mTaskDao = Mockito.mock(TaskDao.class);
     private TaskDataRepository mTaskDataRepository = new TaskDataRepository(mTaskDao);
@@ -49,18 +49,6 @@ public class UnitTest {
         mTaskDataRepository.createTask(task);
         Mockito.verify(mTaskDao).insertTask(task);
         Mockito.verifyNoMoreInteractions(mTaskDao);
-    }
-
-    @Test
-    public void test_projects() {
-        Task task1 = new Task(1, 1, "aaa", 123);
-        Task task2 = new Task(2, 2, "zzz", 124);
-        Task task3 = new Task(3, 3, "hhh", 125);
-        Task task4 = new Task(4, 4, "task 4", new Date().getTime());
-        assertEquals("Projet Tartampion", task1.getProject().getName());
-        assertEquals("Projet Lucidia", task2.getProject().getName());
-        assertEquals("Projet Circus", task3.getProject().getName());
-        assertNull(task4.getProject());
     }
 
     @Test

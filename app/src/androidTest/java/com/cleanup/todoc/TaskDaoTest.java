@@ -1,5 +1,6 @@
 package com.cleanup.todoc;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -12,7 +13,9 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.cleanup.todoc.DataBase.DataBase.TodocMasterDataBase;
+import com.cleanup.todoc.DataBase.DataBase.dao.ProjectDao;
 import com.cleanup.todoc.DataBase.DataBase.dao.TaskDao;
+import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 
 import org.junit.After;
@@ -39,6 +42,8 @@ public class TaskDaoTest {
         Context context = ApplicationProvider.getApplicationContext();
         db = Room.inMemoryDatabaseBuilder(context, TodocMasterDataBase.class).build();
         mTaskDao = db.taskDao();
+        ProjectDao mProjectDao = db.projectDao();
+        mProjectDao.insertProjects(new Project(1,"test1",0xFFB4CDBA));
     }
 
     @After
@@ -47,8 +52,8 @@ public class TaskDaoTest {
     }
 
     final Task task1 = new Task(1, 1, "aaa", 123);
-    final Task task2 = new Task(2, 2, "zzz", 124);
-    final Task task3 = new Task(3, 3, "hhh", 125);
+    final Task task2 = new Task(2, 1, "zzz", 124);
+    final Task task3 = new Task(3, 1, "hhh", 125);
 
     @Test
     public void testAddAndDeleteTask() throws InterruptedException {
@@ -57,6 +62,7 @@ public class TaskDaoTest {
         List<Task> tasks = LiveDataTestUtil.getOrAwaitValue(mTaskDao.getTasks());
         assertTrue(tasks.contains(taskToDelete));
         mTaskDao.deleteTask(taskToDelete);
+        tasks = LiveDataTestUtil.getOrAwaitValue(mTaskDao.getTasks());
         assertFalse(tasks.contains(taskToDelete));
     }
 
@@ -66,9 +72,9 @@ public class TaskDaoTest {
         mTaskDao.insertTask(task2);
         mTaskDao.insertTask(task3);
         List<Task> tasks = LiveDataTestUtil.getOrAwaitValue(mTaskDao.getTasksSortByAscName());
-        assertSame(tasks.get(0), task1);
-        assertSame(tasks.get(1), task3);
-        assertSame(tasks.get(2), task2);
+        assertEquals(tasks.get(0), task1);
+        assertEquals(tasks.get(1), task3);
+        assertEquals(tasks.get(2), task2);
     }
 
     @Test
@@ -77,9 +83,9 @@ public class TaskDaoTest {
         mTaskDao.insertTask(task2);
         mTaskDao.insertTask(task3);
         List<Task> tasks = LiveDataTestUtil.getOrAwaitValue(mTaskDao.getTasksSortByDescName());
-        assertSame(tasks.get(0), task2);
-        assertSame(tasks.get(1), task3);
-        assertSame(tasks.get(2), task1);
+        assertEquals(tasks.get(0), task2);
+        assertEquals(tasks.get(1), task3);
+        assertEquals(tasks.get(2), task1);
     }
 
     @Test
@@ -88,9 +94,9 @@ public class TaskDaoTest {
         mTaskDao.insertTask(task2);
         mTaskDao.insertTask(task3);
         List<Task> tasks = LiveDataTestUtil.getOrAwaitValue(mTaskDao.getTasksSortByAscNumberTime());
-        assertSame(tasks.get(0), task3);
-        assertSame(tasks.get(1), task2);
-        assertSame(tasks.get(2), task1);
+        assertEquals(tasks.get(0), task1);
+        assertEquals(tasks.get(1), task2);
+        assertEquals(tasks.get(2), task3);
     }
 
     @Test
@@ -99,8 +105,8 @@ public class TaskDaoTest {
         mTaskDao.insertTask(task2);
         mTaskDao.insertTask(task3);
         List<Task> tasks = LiveDataTestUtil.getOrAwaitValue(mTaskDao.getTasksSortByDescNumberTime());
-        assertSame(tasks.get(0), task1);
-        assertSame(tasks.get(1), task2);
-        assertSame(tasks.get(2), task3);
+        assertEquals(tasks.get(0), task3);
+        assertEquals(tasks.get(1), task2);
+        assertEquals(tasks.get(2), task1);
     }
 }
