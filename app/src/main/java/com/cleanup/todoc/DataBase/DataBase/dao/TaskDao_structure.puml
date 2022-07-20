@@ -1,0 +1,379 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": false,
+    "cutInterfaceStructures": false,
+    "cutDataStructures": false,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 6,
+    "backwardDepth": 6,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.cleanup.todoc.DataBase.DataBase.dao.TaskDao",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_856774308 { 
+   	label=cleanup
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1925994771 { 
+   	label=todoc
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   MainActivity592173596[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MainActivity</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   adapter: TasksAdapter [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   allProjects: Project[] [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   dialog: AlertDialog [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   dialogEditText: EditText [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   dialogSpinner: Spinner [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   idSort: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   lblNoTasks: TextView [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   listTasks: RecyclerView [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   mTaskViewModel: TaskViewModel [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- addTask(task: Task)</TD></TR>
+<TR><TD ALIGN="LEFT" >- configureViewModel()</TD></TR>
+<TR><TD ALIGN="LEFT" >- getProjects()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCreate(savedInstanceState: Bundle)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCreateOptionsMenu(menu: Menu): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onDeleteTask(task: Task)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onOptionsItemSelected(item: MenuItem): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >- onPositiveButtonClick(dialogInterface: DialogInterface)</TD></TR>
+<TR><TD ALIGN="LEFT" ># onSaveInstanceState(outState: Bundle)</TD></TR>
+<TR><TD ALIGN="LEFT" >- populateDialogSpinner()</TD></TR>
+<TR><TD ALIGN="LEFT" >- showAddTaskDialog()</TD></TR>
+<TR><TD ALIGN="LEFT" >- updateProjects(projects: List&lt;Project&gt;)</TD></TR>
+<TR><TD ALIGN="LEFT" >- updateTasks(tasks: List&lt;Task&gt;)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MainActivityInstrumentedTest1258479462[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MainActivityInstrumentedTest</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+   rule: ActivityTestRule&lt;MainActivity&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ addAndRemoveTask()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ sortTasks()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Task2005803681[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Task</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   creationTimestamp: long [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   id: long [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   name: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   projectId: long [1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+TaskDao2094964310[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)TaskDao</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ deleteAllTask()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ deleteTask(task: Task)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getTasks(): LiveData&lt;List&lt;Task&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getTasksSortByAscName(): LiveData&lt;List&lt;Task&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getTasksSortByAscNumberTime(): LiveData&lt;List&lt;Task&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getTasksSortByDescName(): LiveData&lt;List&lt;Task&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getTasksSortByDescNumberTime(): LiveData&lt;List&lt;Task&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ insertTask(task: Task)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+TaskDaoTest1258479462[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)TaskDaoTest</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   db: TodocMasterDataBase [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   instantTaskExecutorRule: InstantTaskExecutorRule [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mTaskDao: TaskDao [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   task1: Task [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   task2: Task [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   task3: Task [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ closeDb()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createDb()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ testAddAndDeleteTask()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ testGetTasksSortByAscName()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ testGetTasksSortByAscNumberTime()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ testGetTasksSortByDescName()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ testGetTasksSortByDescNumberTime()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+TaskDao_Impl2094964310[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)TaskDao_Impl</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   __db: RoomDatabase [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   __deletionAdapterOfTask: EntityDeletionOrUpdateAdapter&lt;Task&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   __insertionAdapterOfTask: EntityInsertionAdapter&lt;Task&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   __preparedStmtOfDeleteAllTask: SharedSQLiteStatement [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ deleteAllTask()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ deleteTask(task: Task)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ insertTask(task: Task)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+TaskDataRepository619880146[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)TaskDataRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   mTaskDao: TaskDao [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ createTask(task: Task)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ deleteTask(task: Task)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+TaskViewHolder1419102573[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)TaskViewHolder</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   deleteTaskListener: DeleteTaskListener [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   imgDelete: AppCompatImageView [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   imgProject: AppCompatImageView [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   lblProjectName: TextView [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   lblTaskName: TextView [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" ># bind(task: Task)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+TaskViewModel592173596[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)TaskViewModel</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   idSort: MutableLiveData&lt;Integer&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mExecutor: Executor [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mProjectDataSource: ProjectDataRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mProjects: LiveData&lt;List&lt;Project&gt;&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mTaskDataSource: TaskDataRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mTasks: LiveData&lt;List&lt;Task&gt;&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ createTask(task: Task)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ deleteTask(task: Task)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ init()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onSortChanged(idSort: int)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+TasksAdapter592173596[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)TasksAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   deleteTaskListener: DeleteTaskListener [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   tasks: List&lt;Task&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ onBindViewHolder(taskViewHolder: TaskViewHolder, position: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCreateViewHolder(viewGroup: ViewGroup, viewType: int): TaskViewHolder</TD></TR>
+<TR><TD ALIGN="LEFT" ># updateTasks(tasks: List&lt;Task&gt;)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+TodocMasterDataBase299210746[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)TodocMasterDataBase</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getInstance(context: Context): TodocMasterDataBase</TD></TR>
+<TR><TD ALIGN="LEFT" >- prepopulateDatabase(): Callback</TD></TR>
+<TR><TD ALIGN="LEFT" >+ projectDao(): ProjectDao</TD></TR>
+<TR><TD ALIGN="LEFT" >+ taskDao(): TaskDao</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+TodocMasterDataBase_Impl299210746[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)TodocMasterDataBase_Impl</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   _projectDao: ProjectDao [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   _taskDao: TaskDao [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ clearAllTables()</TD></TR>
+<TR><TD ALIGN="LEFT" ># createInvalidationTracker(): InvalidationTracker</TD></TR>
+<TR><TD ALIGN="LEFT" ># createOpenHelper(configuration: DatabaseConfiguration): SupportSQLiteOpenHelper</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getAutoMigrations(autoMigrationSpecsMap: Map&lt;Class&lt;? extends AutoMigrationSpec&gt;, AutoMigrationSpec&gt;): List&lt;Migration&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ projectDao(): ProjectDao</TD></TR>
+<TR><TD ALIGN="LEFT" >+ taskDao(): TaskDao</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ViewModelFactory1823728719[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ViewModelFactory</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   mExecutor: Executor [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mProjectDataSource: ProjectDataRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mTaskDataSource: TaskDataRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ create(modelClass: Class&lt;T&gt;): T</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+MainActivity592173596 -> TaskViewModel592173596[label="mTaskViewModel
+[0..1]"];
+MainActivityInstrumentedTest1258479462 -> MainActivity592173596[label="rule
+[0..1]"];
+TaskDao2094964310 -> TaskDao_Impl2094964310[arrowhead=none, arrowtail=empty, dir=both];
+TaskDaoTest1258479462 -> TaskDao2094964310[label="mTaskDao
+[0..1]"];
+TaskDaoTest1258479462 -> TodocMasterDataBase299210746[label="db
+[0..1]"];
+TaskDao_Impl2094964310 -> Task2005803681[label="__deletionAdapterOfTask
+[0..1]"];
+TaskDao_Impl2094964310 -> Task2005803681[label="__insertionAdapterOfTask
+[0..1]"];
+TaskDataRepository619880146 -> TaskDao2094964310[label="mTaskDao
+[0..1]"];
+TaskViewHolder1419102573 -> MainActivity592173596[label="deleteTaskListener
+[0..1]", arrowhead=none];
+TaskViewModel592173596 -> TaskDataRepository619880146[label="mTaskDataSource
+[0..1]"];
+TasksAdapter592173596 -> MainActivity592173596[label="deleteTaskListener
+[0..1]", arrowhead=none];
+TodocMasterDataBase299210746 -> TodocMasterDataBase_Impl299210746[arrowhead=none, arrowtail=empty, dir=both];
+TodocMasterDataBase_Impl299210746 -> TaskDao2094964310[label="_taskDao
+[0..1]"];
+ViewModelFactory1823728719 -> TaskDataRepository619880146[label="mTaskDataSource
+[0..1]"];
+    
+}
+@enduml
